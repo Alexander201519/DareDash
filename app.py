@@ -44,6 +44,7 @@ def get_user_stats(username):
     return level, total_xp, xp_in_level
 
 # --- 3. SIDEBAR (Login & Levels) ---
+components.html(adsense_code, height=120)
 st.sidebar.title("👤 Player Profile")
 if st.session_state.current_user:
     lvl, xp, progress = get_user_stats(st.session_state.current_user)
@@ -132,5 +133,6 @@ if st.session_state.current_user:
                 if has_liked: st.caption("Liked!")
 else:
     st.warning("Welcome! Register or Login to start doing dares and earning XP!")
+
 
 

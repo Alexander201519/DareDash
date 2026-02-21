@@ -73,6 +73,8 @@ else:
 # --- 4. MAIN APP ---
 st.title("🏆 DareDash Global")
 
+components.html(adsense_code, height=120)
+
 if st.session_state.current_user:
     # --- STEP 1: GET DARE ---
     st.header("🎲 Step 1: Get Your Dare")
@@ -132,6 +134,7 @@ if st.session_state.current_user:
                 if has_liked: st.caption("Liked!")
 else:
     st.warning("Welcome! Register or Login to start doing dares and earning XP!")
+
 
 
 

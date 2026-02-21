@@ -17,7 +17,6 @@ adsense_code = """
 </script>
 """
 
-components.html(adsense_code, height=120)
 # --- 1. SET UP GLOBAL SHARED STORAGE ---
 # On Streamlit Cloud, this 'st.session_state' is local to a user.
 # To make it global across ALL users, we use st.cache_resource for the "Database"
@@ -134,6 +133,7 @@ if st.session_state.current_user:
                 if has_liked: st.caption("Liked!")
 else:
     st.warning("Welcome! Register or Login to start doing dares and earning XP!")
+
 
 
 

@@ -1,15 +1,25 @@
 import streamlit as st
 import random
 import uuid
+import streamlit.components.v1 as components
 
+# --- 0. Adsterra Ad Code ---
+adsterra_code = """
+<script type="text/javascript">
+  atOptions = {
+    'key' : '247a12053c3169407fa5db170dc382f7',
+    'format' : 'iframe',
+    'height' : 90,
+    'width' : 728,
+    'params' : {}
+  };
+  document.write('<scr' + 'ipt type="text/javascript" src="https://www.profitabledisplaynetwork.com/247a12053c3169407fa5db170dc382f7/invoke.js"></scr' + 'ipt>');
+</script>
+"""
 
-
-# --- 1. SET UP GLOBAL SHARED STORAGE ---
-# On Streamlit Cloud, this 'st.session_state' is local to a user.
-# To make it global across ALL users, we use st.cache_resource for the "Database"
+# --- 1. GLOBAL SHARED STORAGE ---
 @st.cache_resource
 def get_global_db():
-    # This acts as our shared "Cloud" memory
     return {"users": {}, "video_feed": []}
 
 db = get_global_db()
@@ -20,7 +30,7 @@ if "active_dare" not in st.session_state:
 if "current_user" not in st.session_state:
     st.session_state.current_user = None
 
-# --- 2. LEVEL CALCULATION LOGIC ---
+# --- 2. USER LEVEL CALCULATION ---
 def get_user_stats(username):
     user_videos = [p for p in db["video_feed"] if p['user'] == username]
     total_likes = sum(len(p['liked_by']) for p in user_videos)
@@ -59,8 +69,11 @@ else:
 # --- 4. MAIN APP ---
 st.title("🏆 DareDash Global")
 
+# Show Adsterra ad under title
+components.html(adsterra_code, height=120)
+
 if st.session_state.current_user:
-    # --- STEP 1: GET DARE ---
+    # STEP 1: GET DARE
     st.header("🎲 Step 1: Get Your Dare")
     dares = [
         "Do 10 pushups", "Sing ABCs backwards", "Balance a spoon on your nose", 
@@ -74,7 +87,7 @@ if st.session_state.current_user:
     if st.session_state.active_dare:
         st.info(f"**YOUR CHALLENGE:** {st.session_state.active_dare}")
 
-        # --- STEP 2: UPLOAD ---
+        # STEP 2: UPLOAD
         st.header("📤 Step 2: Upload Proof")
         uploaded_file = st.file_uploader("Upload Video", type=["mp4", "mov"])
         
@@ -83,7 +96,7 @@ if st.session_state.current_user:
                 new_post = {
                     "id": str(uuid.uuid4()),
                     "user": st.session_state.current_user,
-                    "video": uploaded_file.read(), # Read bytes for global sharing
+                    "video": uploaded_file.read(),
                     "dare_name": st.session_state.active_dare,
                     "liked_by": set()
                 }
@@ -92,11 +105,10 @@ if st.session_state.current_user:
                 st.success("Posted! Everyone can see it now!")
                 st.rerun()
 
-    # --- 5. GLOBAL FEED & LEADERBOARD ---
+    # STEP 3: GLOBAL FEED & LEADERBOARD
     st.divider()
     st.header("🌎 Global Feed")
     
-    # Sort by likes
     sorted_feed = sorted(db["video_feed"], key=lambda x: len(x['liked_by']), reverse=True)
     
     if not sorted_feed:
@@ -110,7 +122,6 @@ if st.session_state.current_user:
                 st.write(f"**{post['user']}** (Lvl {p_lvl}) — *{post['dare_name']}*")
                 st.video(post['video'])
             with col2:
-                # Anti-Spam Check
                 has_liked = st.session_state.current_user in post['liked_by']
                 if st.button(f"❤️ {len(post['liked_by'])}", key=f"lk_{post['id']}", disabled=has_liked):
                     post['liked_by'].add(st.session_state.current_user)
@@ -118,10 +129,3 @@ if st.session_state.current_user:
                 if has_liked: st.caption("Liked!")
 else:
     st.warning("Welcome! Register or Login to start doing dares and earning XP!")
-
-
-
-
-
-
-

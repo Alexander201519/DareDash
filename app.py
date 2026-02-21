@@ -1,6 +1,7 @@
 import streamlit as st
 import random
 import uuid
+import streamlit.components.v1 as components
 
 adsense_code = """
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8843776620200227"
@@ -131,4 +132,5 @@ if st.session_state.current_user:
                 if has_liked: st.caption("Liked!")
 else:
     st.warning("Welcome! Register or Login to start doing dares and earning XP!")
+
 

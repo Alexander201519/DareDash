@@ -1,21 +1,8 @@
 import streamlit as st
 import random
 import uuid
-import streamlit.components.v1 as components
 
-adsense_code = """
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8843776620200227"
-     crossorigin="anonymous"></script>
 
-<ins class="adsbygoogle"
-     style="display:inline-block;width:728px;height:90px"
-     data-ad-client="ca-pub-8843776620200227"
-     data-ad-slot="7251578989"></ins>
-
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-"""
 
 # --- 1. SET UP GLOBAL SHARED STORAGE ---
 # On Streamlit Cloud, this 'st.session_state' is local to a user.
@@ -71,8 +58,6 @@ else:
 
 # --- 4. MAIN APP ---
 st.title("🏆 DareDash Global")
-
-components.html(adsense_code, height=120)
 
 if st.session_state.current_user:
     # --- STEP 1: GET DARE ---
@@ -133,6 +118,7 @@ if st.session_state.current_user:
                 if has_liked: st.caption("Liked!")
 else:
     st.warning("Welcome! Register or Login to start doing dares and earning XP!")
+
 
 
 
